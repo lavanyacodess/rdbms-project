@@ -16,6 +16,7 @@ export async function POST(_request, { params }) {
     connection = await getConnection();
     await connection.beginTransaction();
 
+    // Lock the event row first so concurrent registrations serialize their capacity checks.
     const [eventRows] = await connection.execute(
       `SELECT event_id, capacity, (event_date < NOW()) AS is_past
          FROM events
@@ -59,6 +60,7 @@ export async function POST(_request, { params }) {
     }
 
     if (existing) {
+      // Cancelling keeps the row, so re-registration reactivates it instead of inserting.
       await connection.execute(
         `UPDATE event_registrations
             SET status = 'REGISTERED', registration_date = CURRENT_TIMESTAMP
@@ -112,6 +114,22 @@ export async function DELETE(_request, { params }) {
     const user = await requireUser();
     const { id } = await params;
     const eventId = numericParam(id, "event ID");
+
+    // Match the UI: registrations can no longer be changed once the event has passed.
+    const eventRows = await query(
+      `SELECT event_id, (event_date < NOW()) AS is_past
+         FROM events
+        WHERE event_id = ?
+        LIMIT 1`,
+      [eventId],
+    );
+    const event = eventRows[0];
+    if (!event) {
+      throw new ApiError(404, "Event not found.");
+    }
+    if (Number(event.is_past) === 1) {
+      throw new ApiError(409, "This event has already taken place.");
+    }
 
     const result = await query(
       `UPDATE event_registrations

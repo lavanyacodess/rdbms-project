@@ -143,6 +143,8 @@ export default async function EventsPage({ searchParams }) {
         key={`${clubFilter ?? "all"}:${searchQuery}`}
         method="get"
         action="/events"
+        role="search"
+        aria-label="Filter events"
         className="card mb-6 p-4 sm:p-5"
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px_auto] lg:items-end">
@@ -208,8 +210,8 @@ export default async function EventsPage({ searchParams }) {
           <span className="chip">
             <Icon name="check" className="h-3.5 w-3.5 text-emerald-600" />
             {myRegistrations === 0
-              ? "No registrations yet"
-              : `${pluralize(myRegistrations, "registration")} for you`}
+              ? "No upcoming registrations"
+              : `${pluralize(myRegistrations, "upcoming registration")} for you`}
           </span>
         ) : (
           <span className="chip">
