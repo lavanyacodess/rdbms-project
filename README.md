@@ -44,6 +44,18 @@ No ORM is used. SQL is written directly with parameterized queries so the relati
 npm install
 ```
 
+#### Windows without a MySQL service
+
+If MySQL is not installed as a Windows service, the repository includes a helper for the user-space instance used during development. It expects MySQL at `%LOCALAPPDATA%\CampusConnect`; set `CAMPUSCONNECT_MYSQL_HOME` to use another location.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/mysql-local.ps1 start
+powershell -ExecutionPolicy Bypass -File scripts/mysql-local.ps1 status
+powershell -ExecutionPolicy Bypass -File scripts/mysql-local.ps1 stop
+```
+
+This starts MySQL on `127.0.0.1:3306`. Because it is not a Windows service, run `start` again after rebooting the machine.
+
 ### 3. Configure environment variables
 
 Copy `.env.example` to `.env.local` and fill in your MySQL credentials:
@@ -156,7 +168,8 @@ db/
 scripts/
 ├── init-db.js
 ├── seed.js
-└── check-db.js
+├── check-db.js
+└── mysql-local.ps1           # Optional Windows user-space MySQL helper
 docs/
 └── BUILD_GUIDE.md             # Architecture and module contracts
 ```

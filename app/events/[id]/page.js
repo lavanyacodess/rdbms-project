@@ -361,49 +361,49 @@ export default async function EventDetailPage({ params }) {
               {participants.length > 0 ? (
                 <div className="table-shell mt-5">
                   <div className="overflow-x-auto">
-                  <table className="table-base min-w-[640px]">
-                    <caption className="sr-only">
-                      Registered participants for {event.event_name}
-                    </caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">Student</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Department</th>
-                        <th scope="col">Year</th>
-                        <th scope="col">Registered</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {participants.map((participant) => (
-                        <tr key={participant.user_id}>
-                          <td>
-                            <div className="flex items-center gap-2.5">
-                              <span className="avatar h-8 w-8 text-[11px]">
-                                {initials(participant.name)}
-                              </span>
-                              <span className="font-semibold text-slate-900">
-                                {participant.name}
-                              </span>
-                            </div>
-                          </td>
-                          <td>
-                            <a
-                              href={`mailto:${participant.email}`}
-                              className="text-brand-700 hover:underline"
-                            >
-                              {participant.email}
-                            </a>
-                          </td>
-                          <td>{participant.department || "—"}</td>
-                          <td>{participant.year ?? "—"}</td>
-                          <td className="whitespace-nowrap">
-                            {formatDateTime(participant.registration_date)}
-                          </td>
+                    <table className="table-base min-w-[640px]">
+                      <caption className="sr-only">
+                        Registered participants for {event.event_name}
+                      </caption>
+                      <thead>
+                        <tr>
+                          <th scope="col">Student</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Department</th>
+                          <th scope="col">Year</th>
+                          <th scope="col">Registered</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {participants.map((participant) => (
+                          <tr key={participant.user_id}>
+                            <td>
+                              <div className="flex items-center gap-2.5">
+                                <span className="avatar h-8 w-8 text-[11px]">
+                                  {initials(participant.name)}
+                                </span>
+                                <span className="font-semibold text-slate-900">
+                                  {participant.name}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <a
+                                href={`mailto:${participant.email}`}
+                                className="text-brand-700 hover:underline"
+                              >
+                                {participant.email}
+                              </a>
+                            </td>
+                            <td>{participant.department || "—"}</td>
+                            <td>{participant.year ?? "—"}</td>
+                            <td className="whitespace-nowrap">
+                              {formatDateTime(participant.registration_date)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               ) : (

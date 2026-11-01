@@ -114,6 +114,16 @@ export async function PATCH(request, { params }) {
       requireFuture: Number(existing.is_past) !== 1,
     });
 
+    const registeredCount = Number(existing.registered_count || 0);
+    if (fields.capacity !== null && fields.capacity < registeredCount) {
+      throw new ApiError(
+        400,
+        `Capacity cannot be less than the ${registeredCount} registered participant${
+          registeredCount === 1 ? "" : "s"
+        }.`,
+      );
+    }
+
     await query(
       `UPDATE events
           SET event_name = ?, description = ?, event_date = ?, venue = ?, capacity = ?
