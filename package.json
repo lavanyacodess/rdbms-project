@@ -1,0 +1,37 @@
+{
+  "name": "campus-connect",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "description": "College club management system built with Next.js, MySQL, and mysql2.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "node --test",
+    "db:check": "node scripts/check-db.js",
+    "db:init": "node scripts/init-db.js",
+    "db:seed": "node scripts/seed.js",
+    "db:setup": "node scripts/init-db.js && node scripts/seed.js",
+    "admin:grant": "node scripts/grant-admin.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.9",
+    "jose": "^6.2.14",
+    "mysql2": "^3.24.6",
+    "next": "^16.4.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "^16.4.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
