@@ -1,23 +1,7 @@
 export function LogoMark({ className = "h-9 w-9" }) {
   return (
-    <span
-      className={`relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-brand-600 via-brand-500 to-violet-500 text-white shadow-md shadow-brand-900/20 ${className}`}
-      aria-hidden="true"
-    >
-      <svg viewBox="0 0 32 32" fill="none" className="h-[62%] w-[62%]">
-        <path
-          d="M16 4.5 26 9.5v6.2c0 5.6-4 10.2-10 11.8-6-1.6-10-6.2-10-11.8V9.5l10-5Z"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M12 15.6h8M16 11.6v8"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-        />
-      </svg>
+    <span className={`logo-mark ${className}`} aria-hidden="true">
+      <span className="logo-mark-letter">C</span>
     </span>
   );
 }

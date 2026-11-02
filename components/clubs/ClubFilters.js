@@ -11,39 +11,41 @@ function buildHref(q, category) {
 
 export default function ClubFilters({ q, category, categories }) {
   return (
-    <section className="card p-5 sm:p-6" aria-label="Search and filter clubs">
+    <section className="filter-bar" aria-label="Search and filter clubs">
       <form
         method="get"
         action="/clubs"
         role="search"
-        className="flex flex-col gap-3 sm:flex-row"
+        className="flex flex-col gap-3 sm:flex-row sm:items-end"
       >
         {category ? <input type="hidden" name="category" value={category} /> : null}
-        <div className="relative flex-1">
-          <label htmlFor="club-search" className="sr-only">
+        <div className="flex-1">
+          <label htmlFor="club-search" className="label">
             Search clubs
           </label>
-          <Icon
-            name="search"
-            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-          />
-          <input
-            id="club-search"
-            name="q"
-            type="search"
-            defaultValue={q}
-            maxLength={100}
-            className="input pl-10"
-            placeholder="Search by club name or description"
-          />
+          <div className="relative">
+            <Icon
+              name="search"
+              className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
+            />
+            <input
+              id="club-search"
+              name="q"
+              type="search"
+              defaultValue={q}
+              maxLength={100}
+              className="input pl-7"
+              placeholder="Search by club name or description"
+            />
+          </div>
         </div>
         <div className="flex gap-2">
-          <button type="submit" className="btn-primary flex-1 sm:flex-none">
-            <Icon name="search" className="h-4 w-4" />
+          <button type="submit" className="btn btn-primary flex-1 sm:flex-none">
+            <Icon name="search" className="h-3.5 w-3.5" />
             Search
           </button>
           {q || category ? (
-            <Link href="/clubs" className="btn-ghost">
+            <Link href="/clubs" className="btn btn-ghost">
               Reset
             </Link>
           ) : null}
@@ -53,11 +55,7 @@ export default function ClubFilters({ q, category, categories }) {
       <div className="mt-4 flex flex-wrap gap-2">
         <Link
           href={buildHref(q, "")}
-          className={
-            !category
-              ? "chip border-brand-200 bg-brand-50 text-brand-700"
-              : "chip transition hover:border-brand-200 hover:text-brand-700"
-          }
+          className="chip"
           aria-current={!category ? "page" : undefined}
         >
           All clubs
@@ -66,11 +64,7 @@ export default function ClubFilters({ q, category, categories }) {
           <Link
             key={item}
             href={buildHref(q, item)}
-            className={
-              category === item
-                ? "chip border-brand-200 bg-brand-50 text-brand-700"
-                : "chip transition hover:border-brand-200 hover:text-brand-700"
-            }
+            className="chip"
             aria-current={category === item ? "page" : undefined}
           >
             {item}

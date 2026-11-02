@@ -58,10 +58,10 @@ export default function EditClubForm({ club }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} aria-busy={loading} className="space-y-5">
+    <form onSubmit={handleSubmit} aria-busy={loading} className="space-y-6">
       <div>
         <label htmlFor="club_name" className="label">
-          Club name <span className="text-rose-600">*</span>
+          Club name <span className="text-[var(--margin)]">*</span>
         </label>
         <input
           id="club_name"
@@ -121,12 +121,12 @@ export default function EditClubForm({ club }) {
         </p>
       ) : null}
 
-      <div className="flex flex-wrap items-center gap-2">
-        <button type="submit" className="btn-primary" disabled={loading}>
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? "Saving…" : "Save changes"}
           {!loading ? <Icon name="check" className="h-4 w-4" /> : null}
         </button>
-        <p className="text-xs text-slate-500">Changes appear on the public page right away.</p>
+        <p className="hint mt-0">Changes appear on the public page right away.</p>
       </div>
     </form>
   );

@@ -20,8 +20,9 @@ export default function NavLinks({ mobile = false }) {
           <Link
             key={link.href}
             href={link.href}
+            aria-current={active ? "page" : undefined}
             className={`nav-link ${active ? "nav-link-active" : ""} ${
-              mobile ? "w-full" : ""
+              mobile ? "nav-link-mobile" : ""
             }`}
           >
             {link.label}

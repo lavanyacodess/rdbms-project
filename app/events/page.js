@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { query } from "@/lib/db";
 import { getSessionUser } from "@/lib/auth";
-import { pluralize } from "@/lib/format";
+import { formatEventDate, formatTime, pluralize } from "@/lib/format";
 import EventCard from "@/components/EventCard";
 import EmptyState from "@/components/EmptyState";
 import PageHeader from "@/components/PageHeader";
+import SectionHeading from "@/components/clubs/SectionHeading";
 import { Icon } from "@/components/Icons";
 import RegisterEventButton from "@/components/events/RegisterEventButton";
 
@@ -33,7 +34,7 @@ function EventActions({ event, user }) {
 
   return (
     <div className="flex flex-wrap items-center justify-end gap-2">
-      <Link href={`/events/${event.event_id}`} className="btn-ghost btn-sm">
+      <Link href={`/events/${event.event_id}`} className="btn btn-ghost btn-sm">
         Details
       </Link>
       {user ? (
@@ -44,11 +45,11 @@ function EventActions({ event, user }) {
           registeredCount={event.registered_count}
         />
       ) : full ? (
-        <button type="button" className="btn-secondary btn-sm" disabled>
+        <button type="button" className="btn btn-secondary btn-sm" disabled>
           Event full
         </button>
       ) : (
-        <Link href={loginHref} className="btn-secondary btn-sm">
+        <Link href={loginHref} className="btn btn-secondary btn-sm">
           Sign in to register
         </Link>
       )}
@@ -132,8 +133,8 @@ export default async function EventsPage({ searchParams }) {
         title="Events"
         description="Discover workshops, competitions, cultural nights, and more. Register for what excites you and keep track of everything coming up."
         actions={
-          <Link href="/clubs" className="btn-secondary">
-            <Icon name="building" className="h-4 w-4" />
+          <Link href="/clubs" className="btn btn-secondary">
+            <Icon name="building" className="h-3.5 w-3.5" />
             Browse clubs
           </Link>
         }
@@ -145,7 +146,7 @@ export default async function EventsPage({ searchParams }) {
         action="/events"
         role="search"
         aria-label="Filter events"
-        className="card mb-6 p-4 sm:p-5"
+        className="filter-bar mb-6"
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px_auto] lg:items-end">
           <div>
@@ -155,7 +156,7 @@ export default async function EventsPage({ searchParams }) {
             <div className="relative">
               <Icon
                 name="search"
-                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
               />
               <input
                 id="event-search"
@@ -164,7 +165,7 @@ export default async function EventsPage({ searchParams }) {
                 defaultValue={searchQuery}
                 placeholder="Search by event, venue, or description"
                 maxLength={100}
-                className="input pl-9"
+                className="input pl-7"
               />
             </div>
           </div>
@@ -189,11 +190,11 @@ export default async function EventsPage({ searchParams }) {
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn btn-primary w-full sm:w-auto">
               Apply filters
             </button>
             {hasFilters ? (
-              <Link href="/events" className="btn-ghost">
+              <Link href="/events" className="btn btn-ghost">
                 Clear
               </Link>
             ) : null}
@@ -201,21 +202,21 @@ export default async function EventsPage({ searchParams }) {
         </div>
       </form>
 
-      <div className="mb-8 flex flex-wrap items-center gap-2">
+      <div className="summary-strip mb-8">
         <span className="chip">
-          <Icon name="calendar" className="h-3.5 w-3.5 text-brand-600" />
+          <Icon name="calendar" className="h-3.5 w-3.5 text-[var(--margin)]" />
           {pluralize(upcoming.length, "upcoming event")}
         </span>
         {user ? (
           <span className="chip">
-            <Icon name="check" className="h-3.5 w-3.5 text-emerald-600" />
+            <Icon name="check" className="h-3.5 w-3.5 text-[var(--approved)]" />
             {myRegistrations === 0
               ? "No upcoming registrations"
               : `${pluralize(myRegistrations, "upcoming registration")} for you`}
           </span>
         ) : (
           <span className="chip">
-            <Icon name="user" className="h-3.5 w-3.5 text-slate-500" />
+            <Icon name="user" className="h-3.5 w-3.5 text-[var(--ink-faint)]" />
             Sign in to register
           </span>
         )}
@@ -224,20 +225,15 @@ export default async function EventsPage({ searchParams }) {
       </div>
 
       <section aria-labelledby="upcoming-events-heading">
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="section-eyebrow">Coming up</p>
-            <h2 id="upcoming-events-heading" className="section-title mt-1">
-              Upcoming events
-            </h2>
-          </div>
-          <span className="text-sm font-medium text-slate-500">
-            {pluralize(upcoming.length, "event")}
-          </span>
-        </div>
+        <SectionHeading
+          id="upcoming-events-heading"
+          eyebrow="Coming up"
+          title="Upcoming events"
+          badge={pluralize(upcoming.length, "event")}
+        />
 
         {upcoming.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {upcoming.map((event) => (
               <EventCard key={event.event_id} event={event}>
                 <EventActions event={event} user={user} />
@@ -255,11 +251,11 @@ export default async function EventsPage({ searchParams }) {
             }
             action={
               hasFilters ? (
-                <Link href="/events" className="btn-secondary">
+                <Link href="/events" className="btn btn-secondary">
                   Clear filters
                 </Link>
               ) : (
-                <Link href="/clubs" className="btn-primary">
+                <Link href="/clubs" className="btn btn-primary">
                   Explore clubs
                 </Link>
               )
@@ -268,28 +264,47 @@ export default async function EventsPage({ searchParams }) {
         )}
       </section>
 
-      <section
-        className="mt-12 border-t border-slate-200 pt-10"
-        aria-labelledby="past-events-heading"
-      >
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <p className="section-eyebrow">Archive</p>
-            <h2 id="past-events-heading" className="section-title mt-1">
-              Past events
-            </h2>
-            <p className="section-copy">
-              A look back at events that have already taken place.
-            </p>
-          </div>
-          <span className="badge-slate">{pluralize(past.length, "past event")}</span>
-        </div>
+      <section className="mt-12" aria-labelledby="past-events-heading">
+        <SectionHeading
+          id="past-events-heading"
+          eyebrow="Archive"
+          title="Past events"
+          description="A look back at events that have already taken place."
+          badge={pluralize(past.length, "past event")}
+        />
 
         {past.length > 0 ? (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {past.map((event) => (
-              <EventCard key={event.event_id} event={event} />
-            ))}
+          <div>
+            {past.map((event) => {
+              const date = formatEventDate(event.event_date);
+              return (
+                <div key={event.event_id} className="archive-row">
+                  <span className="archive-date">
+                    {date.day} {date.month}
+                    <br />
+                    {date.weekday}
+                  </span>
+                  <div className="min-w-0">
+                    <Link href={`/events/${event.event_id}`} className="archive-title hover:text-[var(--margin)]">
+                      {event.event_name}
+                    </Link>
+                    <p className="archive-meta">
+                      {event.club_name} · {event.venue || "Venue to be announced"} ·{" "}
+                      {formatTime(event.event_date)}
+                    </p>
+                    {event.description ? (
+                      <p className="mt-1 line-clamp-1 text-xs leading-5 text-[var(--ink-soft)]">
+                        {event.description}
+                      </p>
+                    ) : null}
+                  </div>
+                  <Link href={`/events/${event.event_id}`} className="btn btn-secondary btn-sm">
+                    Details
+                    <Icon name="arrowRight" className="h-3 w-3" />
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <EmptyState

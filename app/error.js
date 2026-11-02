@@ -10,25 +10,27 @@ export default function GlobalError({ error, reset }) {
   }, [error]);
 
   return (
-    <div className="page-container flex min-h-[60vh] flex-col items-center justify-center py-16 text-center">
-      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
-        <Icon name="info" className="h-7 w-7" />
-      </span>
-      <p className="section-eyebrow mt-6">Something went wrong</p>
-      <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
-        We hit an unexpected snag.
-      </h1>
-      <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">
-        Try again. If the problem continues, make sure the database is running and the environment
-        variables are configured.
-      </p>
-      <div className="mt-6 flex flex-wrap justify-center gap-2">
-        <button type="button" onClick={reset} className="btn-primary">
-          Try again
-        </button>
-        <Link href="/" className="btn-secondary">
-          Back home
-        </Link>
+    <div className="page-container page-section">
+      <div className="paper-slip mx-auto max-w-2xl p-6 text-center sm:p-10">
+        <span className="stamp stamp-red mx-auto">
+          <Icon name="info" className="h-3 w-3" />
+          Something went wrong
+        </span>
+        <h1 className="mt-5 text-[clamp(2rem,4.5vw,3rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-[var(--ink)]">
+          We hit an unexpected snag.
+        </h1>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
+          Try again. If the problem continues, make sure the database is running and the environment
+          variables are configured.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <button type="button" onClick={reset} className="btn btn-primary">
+            Try again
+          </button>
+          <Link href="/" className="btn btn-secondary">
+            Back home
+          </Link>
+        </div>
       </div>
     </div>
   );

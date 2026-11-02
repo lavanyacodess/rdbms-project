@@ -3,19 +3,27 @@ import { getSessionUser } from "@/lib/auth";
 import { initials } from "@/lib/format";
 import { Icon, LogoMark } from "./Icons";
 import LogoutButton from "./LogoutButton";
+import MobileMenu from "./MobileMenu";
 import NavLinks from "./NavLinks";
 
 export default async function Navbar() {
   const user = await getSessionUser();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/85 backdrop-blur-xl">
+    <header className="site-header">
       <div className="page-container">
-        <div className="flex h-16 items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2.5">
-            <LogoMark />
-            <span className="text-lg font-bold tracking-tight text-slate-950">
-              Campus<span className="text-brand-600">Connect</span>
+        <div className="flex min-h-[4.4rem] items-center justify-between gap-4 py-2.5">
+          <Link
+            href="/"
+            className="flex shrink-0 items-center gap-3"
+            aria-label="CampusConnect home"
+          >
+            <LogoMark className="h-10 w-10 text-[1.15rem]" />
+            <span className="flex flex-col">
+              <span className="wordmark">CampusConnect</span>
+              <span className="mono-label mt-1 hidden text-[0.7rem] tracking-[0.18em] sm:block">
+                Campus field notes
+              </span>
             </span>
           </Link>
 
@@ -28,65 +36,75 @@ export default async function Navbar() {
               <>
                 <Link
                   href="/dashboard"
-                  className="flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                  className="flex items-center gap-2 border border-transparent px-1.5 py-1.5 transition hover:border-[var(--rule)] hover:bg-[var(--paper-raised)]"
                 >
-                  <span className="avatar h-8 w-8 text-xs">{initials(user.name)}</span>
-                  <span className="max-w-28 truncate">{user.name.split(" ")[0]}</span>
+                  <span className="avatar h-8 w-8 text-[0.7rem]">{initials(user.name)}</span>
+                  <span className="max-w-28 truncate font-mono text-[0.7rem] font-medium tracking-[0.04em] text-[var(--ink-soft)]">
+                    {user.name.split(" ")[0]}
+                  </span>
                 </Link>
-                <Link href="/dashboard" className="btn-secondary btn-sm">
-                  <Icon name="dashboard" className="h-4 w-4" />
+                <Link href="/dashboard" className="btn btn-secondary btn-sm">
+                  <Icon name="dashboard" className="h-3.5 w-3.5" />
                   Dashboard
                 </Link>
                 <LogoutButton compact />
               </>
             ) : (
               <>
-                <Link href="/login" className="btn-ghost">
+                <Link href="/login" className="btn btn-ghost">
                   Sign in
                 </Link>
-                <Link href="/register" className="btn-primary">
+                <Link href="/register" className="btn btn-primary">
                   Get started
-                  <Icon name="arrowRight" className="h-4 w-4" />
+                  <Icon name="arrowRight" className="h-3.5 w-3.5" />
                 </Link>
               </>
             )}
           </div>
 
-          <details className="group relative md:hidden">
-            <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 [&::-webkit-details-marker]:hidden">
+          <MobileMenu>
+            <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center border border-[var(--rule-strong)] bg-[var(--paper-raised)] text-[var(--ink)] transition hover:bg-[var(--highlighter)] [&::-webkit-details-marker]:hidden">
               <Icon name="menu" className="h-5 w-5 group-open:hidden" />
               <Icon name="close" className="hidden h-5 w-5 group-open:block" />
-              <span className="sr-only">Open navigation menu</span>
+              <span className="sr-only group-open:hidden">Open navigation menu</span>
+              <span className="sr-only hidden group-open:inline">Close navigation menu</span>
             </summary>
-            <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl shadow-slate-900/10">
+            <nav
+              className="paper-slip absolute right-0 mt-2 w-72 p-3"
+              aria-label="Mobile navigation"
+            >
               <NavLinks mobile />
-              <div className="my-2 h-px bg-slate-100" />
+              <div className="my-2 h-px bg-[var(--rule)]" />
               {user ? (
-                <div className="space-y-2 px-1">
-                  <div className="flex items-center gap-2 rounded-xl bg-slate-50 p-2.5">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 border border-[var(--rule)] bg-[var(--paper)] p-2.5">
                     <span className="avatar h-9 w-9 text-xs">{initials(user.name)}</span>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-900">{user.name}</p>
-                      <p className="truncate text-xs text-slate-500">{user.email}</p>
+                      <p className="truncate text-sm font-semibold text-[var(--ink)]">
+                        {user.name}
+                      </p>
+                      <p className="truncate font-mono text-[0.7rem] text-[var(--ink-faint)]">
+                        {user.email}
+                      </p>
                     </div>
                   </div>
-                  <Link href="/dashboard" className="btn-primary w-full">
+                  <Link href="/dashboard" className="btn btn-primary w-full">
                     Dashboard
                   </Link>
-                  <LogoutButton className="btn-secondary w-full" />
+                  <LogoutButton className="btn btn-secondary w-full" />
                 </div>
               ) : (
-                <div className="grid gap-2 px-1">
-                  <Link href="/login" className="btn-secondary w-full">
+                <div className="grid gap-2">
+                  <Link href="/login" className="btn btn-secondary w-full">
                     Sign in
                   </Link>
-                  <Link href="/register" className="btn-primary w-full">
+                  <Link href="/register" className="btn btn-primary w-full">
                     Create account
                   </Link>
                 </div>
               )}
-            </div>
-          </details>
+            </nav>
+          </MobileMenu>
         </div>
       </div>
     </header>

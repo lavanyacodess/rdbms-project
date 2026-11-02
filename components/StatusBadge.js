@@ -1,10 +1,10 @@
 export default function StatusBadge({ status }) {
   const styles = {
-    APPROVED: "badge-green",
-    PENDING: "badge-amber",
-    REJECTED: "badge-rose",
-    REGISTERED: "badge-green",
-    CANCELLED: "badge-slate",
+    APPROVED: "stamp stamp-green",
+    PENDING: "stamp stamp-amber",
+    REJECTED: "stamp stamp-red",
+    REGISTERED: "stamp stamp-green",
+    CANCELLED: "stamp stamp-muted",
   };
   const labels = {
     APPROVED: "Approved",
@@ -14,5 +14,5 @@ export default function StatusBadge({ status }) {
     CANCELLED: "Cancelled",
   };
 
-  return <span className={styles[status] || "badge-slate"}>{labels[status] || status}</span>;
+  return <span className={styles[status] || "stamp stamp-muted"}>{labels[status] || status}</span>;
 }

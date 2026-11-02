@@ -4,7 +4,7 @@ import EmptyState from "@/components/EmptyState";
 import { Icon } from "@/components/Icons";
 import PageHeader from "@/components/PageHeader";
 import { query } from "@/lib/db";
-import { pluralize } from "@/lib/format";
+import { initials, pluralize } from "@/lib/format";
 import { numericParam } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
@@ -94,61 +94,65 @@ export default async function AnnouncementsPage({ searchParams }) {
         title="Announcements"
         description="The latest news from every club on campus, organized club-wise so the updates you care about are easy to find."
         actions={
-          <Link href="/clubs" className="btn-secondary">
+          <Link href="/clubs" className="btn btn-secondary">
             <Icon name="users" className="h-4 w-4" />
             Explore clubs
           </Link>
         }
       />
 
-      <section aria-labelledby="club-filter-heading" className="mb-8">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+      <section
+        aria-labelledby="club-filter-heading"
+        className="mb-8 border-y border-[var(--rule-strong)] py-5"
+      >
+        <div className="grid gap-4 lg:grid-cols-[10rem_minmax(0,1fr)] lg:gap-8">
           <div>
-            <h2 id="club-filter-heading" className="text-sm font-bold text-slate-800">
+            <h2 id="club-filter-heading" className="margin-label">
               Filter by club
             </h2>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-2 text-xs leading-5 text-[var(--ink-soft)]">
               {pluralize(totalAnnouncements, "announcement")} across{" "}
               {pluralize(clubs.length, "club")}. Newest first.
             </p>
+            {selectedClub ? (
+              <Link
+                href="/announcements"
+                className="link-arrow mt-3"
+              >
+                Clear filter
+                <Icon name="close" className="h-3 w-3" />
+              </Link>
+            ) : null}
           </div>
-          {selectedClub ? (
+
+          <div className="announcement-filter-grid">
             <Link
               href="/announcements"
-              className="text-xs font-semibold text-brand-700 transition hover:text-brand-800"
+              className="chip"
+              aria-current={!selectedClub ? "page" : undefined}
             >
-              Clear filter
+              All announcements
+              <span className="count-pill">{totalAnnouncements}</span>
             </Link>
-          ) : null}
-        </div>
 
-        <div className="mt-3 flex flex-wrap gap-2">
-          <Link
-            href="/announcements"
-            className={chipClass(!selectedClub)}
-            aria-current={!selectedClub ? "true" : undefined}
-          >
-            All announcements
-            <CountPill value={totalAnnouncements} active={!selectedClub} />
-          </Link>
+            {clubs.map((club) => {
+              const active = selectedClub
+                ? Number(selectedClub.club_id) === Number(club.club_id)
+                : false;
 
-          {clubs.map((club) => {
-            const active = selectedClub
-              ? Number(selectedClub.club_id) === Number(club.club_id)
-              : false;
-
-            return (
-              <Link
-                key={club.club_id}
-                href={`/announcements?club=${club.club_id}`}
-                className={chipClass(active)}
-                aria-current={active ? "true" : undefined}
-              >
-                {club.club_name}
-                <CountPill value={Number(club.announcement_count)} active={active} />
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={club.club_id}
+                  href={`/announcements?club=${club.club_id}`}
+                  className="chip"
+                  aria-current={active ? "page" : undefined}
+                >
+                  {club.club_name}
+                  <span className="count-pill">{Number(club.announcement_count)}</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -160,10 +164,10 @@ export default async function AnnouncementsPage({ searchParams }) {
             description="This club has not published any updates yet. Check back soon or explore their profile for events and membership details."
             action={
               <div className="flex flex-wrap justify-center gap-2">
-                <Link href="/announcements" className="btn-secondary">
+                <Link href="/announcements" className="btn btn-secondary">
                   View all announcements
                 </Link>
-                <Link href={`/clubs/${selectedClub.club_id}`} className="btn-primary">
+                <Link href={`/clubs/${selectedClub.club_id}`} className="btn btn-primary">
                   View club
                 </Link>
               </div>
@@ -175,7 +179,7 @@ export default async function AnnouncementsPage({ searchParams }) {
             title="No announcements yet"
             description="When club admins publish news, updates, and opportunities, they will appear here organized by club."
             action={
-              <Link href="/clubs" className="btn-primary">
+              <Link href="/clubs" className="btn btn-primary">
                 Explore clubs
               </Link>
             }
@@ -183,22 +187,26 @@ export default async function AnnouncementsPage({ searchParams }) {
         )
       ) : selectedClub ? (
         <section aria-labelledby="selected-club-heading">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="section-eyebrow">Club announcements</p>
-              <h2
-                id="selected-club-heading"
-                className="mt-1 text-2xl font-bold text-slate-950"
-              >
-                {selectedClub.club_name}
-              </h2>
-              <p className="mt-1 text-sm text-slate-500">
-                {pluralize(announcements.length, "announcement")} · newest first
-              </p>
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3 border-t-2 border-[var(--ink)] pt-4">
+            <div className="flex min-w-0 items-start gap-3">
+              <span className="club-mark" aria-hidden="true">
+                {initials(selectedClub.club_name)}
+              </span>
+              <div className="min-w-0">
+                <h2
+                  id="selected-club-heading"
+                  className="text-2xl font-bold leading-tight text-[var(--ink)]"
+                >
+                  {selectedClub.club_name}
+                </h2>
+                <p className="mt-1 text-xs leading-5 text-[var(--ink-soft)]">
+                  {pluralize(announcements.length, "announcement")} · newest first
+                </p>
+              </div>
             </div>
             <Link
               href={`/clubs/${selectedClub.club_id}`}
-              className="btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm"
             >
               View club
               <Icon name="arrowRight" className="h-3.5 w-3.5" />
@@ -222,24 +230,24 @@ export default async function AnnouncementsPage({ searchParams }) {
               key={group.club_id}
               aria-labelledby={`club-announcements-${group.club_id}`}
             >
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-t-2 border-[var(--ink)] pt-3">
                 <div className="flex min-w-0 items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-                    <Icon name="building" className="h-5 w-5" />
+                  <span className="club-mark" aria-hidden="true">
+                    {initials(group.club_name)}
                   </span>
                   <div className="min-w-0">
                     <h2
                       id={`club-announcements-${group.club_id}`}
-                      className="truncate text-lg font-bold text-slate-950"
+                      className="truncate text-lg font-bold leading-tight text-[var(--ink)]"
                     >
                       <Link
                         href={`/clubs/${group.club_id}`}
-                        className="transition hover:text-brand-700"
+                        className="transition hover:text-[var(--margin)]"
                       >
                         {group.club_name}
                       </Link>
                     </h2>
-                    <p className="text-xs text-slate-500">
+                    <p className="mt-0.5 font-mono text-[0.7rem] leading-5 text-[var(--ink-faint)]">
                       {pluralize(group.announcements.length, "announcement")}
                     </p>
                   </div>
@@ -248,13 +256,13 @@ export default async function AnnouncementsPage({ searchParams }) {
                 <div className="flex items-center gap-1">
                   <Link
                     href={`/announcements?club=${group.club_id}`}
-                    className="btn-ghost btn-sm"
+                    className="btn btn-ghost btn-sm"
                   >
                     Filter
                   </Link>
                   <Link
                     href={`/clubs/${group.club_id}`}
-                    className="btn-ghost btn-sm"
+                    className="btn btn-ghost btn-sm"
                   >
                     View club
                     <Icon name="arrowRight" className="h-3.5 w-3.5" />
@@ -276,25 +284,5 @@ export default async function AnnouncementsPage({ searchParams }) {
         </div>
       )}
     </div>
-  );
-}
-
-function chipClass(active) {
-  return `chip transition ${
-    active
-      ? "border-brand-300 bg-brand-50 text-brand-700 ring-1 ring-inset ring-brand-200"
-      : "hover:border-brand-200 hover:bg-brand-50/60 hover:text-brand-700"
-  }`;
-}
-
-function CountPill({ value, active }) {
-  return (
-    <span
-      className={`ml-1.5 rounded-full px-1.5 py-0.5 text-[11px] font-bold ${
-        active ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-500"
-      }`}
-    >
-      {value}
-    </span>
   );
 }

@@ -31,7 +31,7 @@ export default function DeleteEventButton({ eventId, eventName }) {
     return (
       <button
         type="button"
-        className="btn-danger btn-sm"
+        className="btn btn-danger btn-sm"
         onClick={() => {
           setConfirming(true);
           setError("");
@@ -44,11 +44,15 @@ export default function DeleteEventButton({ eventId, eventName }) {
   }
 
   return (
-    <div className="rounded-xl border border-rose-200 bg-rose-50 p-3.5" role="alertdialog" aria-label="Confirm event deletion">
-      <p className="text-sm font-semibold text-rose-800">
+    <div
+      className="confirm-box"
+      role="alertdialog"
+      aria-label="Confirm event deletion"
+    >
+      <p className="text-sm font-bold text-[var(--ink)]">
         Delete {eventName ? `“${eventName}”` : "this event"}?
       </p>
-      <p className="mt-1 text-xs leading-5 text-rose-700">
+      <p className="mt-1 text-xs leading-5 text-[var(--ink-soft)]">
         The event and all of its registrations will be permanently removed. This cannot be undone.
       </p>
       {error ? (
@@ -57,12 +61,12 @@ export default function DeleteEventButton({ eventId, eventName }) {
         </p>
       ) : null}
       <div className="mt-3 flex flex-wrap gap-2">
-        <button type="button" className="btn-danger btn-sm" onClick={handleDelete} disabled={loading}>
+        <button type="button" className="btn btn-danger btn-sm" onClick={handleDelete} disabled={loading}>
           {loading ? "Deleting…" : "Yes, delete"}
         </button>
         <button
           type="button"
-          className="btn-secondary btn-sm"
+          className="btn btn-secondary btn-sm"
           onClick={() => {
             setConfirming(false);
             setError("");

@@ -4,6 +4,7 @@ import { query } from "@/lib/db";
 import { getSessionUser, isClubAdmin } from "@/lib/auth";
 import { formatDateTime, formatEventDate, initials, pluralize } from "@/lib/format";
 import PageHeader from "@/components/PageHeader";
+import SectionHeading from "@/components/clubs/SectionHeading";
 import StatusBadge from "@/components/StatusBadge";
 import { Icon } from "@/components/Icons";
 import RegisterEventButton from "@/components/events/RegisterEventButton";
@@ -95,105 +96,126 @@ export default async function EventDetailPage({ params }) {
         backHref="/events"
         backLabel="All events"
         actions={
-          <Link href={`/clubs/${event.club_id}`} className="btn-secondary">
+          <Link href={`/clubs/${event.club_id}`} className="btn btn-secondary">
             <Icon name="building" className="h-4 w-4" />
             View club
           </Link>
         }
       />
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-        <section className="card overflow-hidden">
-          <div className="h-1.5 bg-gradient-to-r from-brand-500 via-violet-500 to-amber-400" />
-          <div className="p-6 sm:p-8">
-            <div className="flex flex-wrap items-center gap-2">
-              {past ? (
-                <span className="badge-slate">Event ended</span>
-              ) : full ? (
-                <span className="badge-rose">Full</span>
-              ) : (
-                <span className="badge-green">Registration open</span>
-              )}
-              {registrationStatus === "REGISTERED" ? (
-                <StatusBadge status="REGISTERED" />
-              ) : null}
-              {registrationStatus === "CANCELLED" ? (
-                <StatusBadge status="CANCELLED" />
-              ) : null}
-              {event.category ? <span className="badge-slate">{event.category}</span> : null}
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_370px] lg:items-start">
+        <article className="detail-sheet">
+          <header className="detail-head">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {past ? (
+                  <span className="stamp stamp-muted">Event ended</span>
+                ) : full ? (
+                  <span className="stamp stamp-red">Full</span>
+                ) : (
+                  <span className="stamp stamp-green">Registration open</span>
+                )}
+                {registrationStatus === "REGISTERED" ? (
+                  <StatusBadge status="REGISTERED" />
+                ) : null}
+                {registrationStatus === "CANCELLED" ? (
+                  <StatusBadge status="CANCELLED" />
+                ) : null}
+                {event.category ? <span className="tag">{event.category}</span> : null}
+              </div>
+              <span className="mono-label">
+                Event file / {String(event.event_id).padStart(3, "0")}
+              </span>
             </div>
 
-            <div className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center">
-              <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-900/15">
-                <span className="text-[11px] font-bold tracking-[0.18em] text-brand-100">
-                  {date.month}
-                </span>
-                <span className="text-3xl font-extrabold leading-none">{date.day}</span>
-                <span className="mt-1 text-[11px] font-medium text-brand-100">
-                  {date.weekday}
-                </span>
+            <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="event-date-block" aria-hidden="true">
+                <span className="month">{date.month}</span>
+                <span className="day">{date.day}</span>
+                <span className="weekday">{date.weekday}</span>
               </div>
               <div className="min-w-0">
-                <p className="text-base font-bold text-slate-950">
+                <p className="font-mono text-[0.72rem] font-semibold tracking-[0.03em] text-[var(--ink)]">
                   {formatDateTime(event.event_date)}
                 </p>
-                <p className="mt-1.5 flex items-center gap-1.5 text-sm text-slate-600">
-                  <Icon name="mapPin" className="h-4 w-4 shrink-0 text-slate-400" />
+                <p className="mt-2 flex items-center gap-2 text-sm text-[var(--ink-soft)]">
+                  <Icon name="mapPin" className="h-4 w-4 shrink-0 text-[var(--ink-faint)]" />
                   {event.venue || "Venue to be announced"}
                 </p>
-                <p className="mt-1.5 flex items-center gap-1.5 text-sm text-slate-600">
-                  <Icon name="building" className="h-4 w-4 shrink-0 text-slate-400" />
+                <p className="mt-1.5 flex items-center gap-2 text-sm text-[var(--ink-soft)]">
+                  <Icon name="building" className="h-4 w-4 shrink-0 text-[var(--ink-faint)]" />
                   <Link
                     href={`/clubs/${event.club_id}`}
-                    className="font-medium text-brand-700 hover:text-brand-800"
+                    className="font-semibold text-[var(--ink)] underline decoration-[var(--rule-strong)] underline-offset-4 transition hover:text-[var(--margin)]"
                   >
                     {event.club_name}
                   </Link>
                 </p>
               </div>
             </div>
+          </header>
 
-            <div className="mt-7 border-t border-slate-100 pt-6">
-              <h2 className="text-lg font-bold text-slate-950">About this event</h2>
-              <p className="mt-2 whitespace-pre-line break-words text-sm leading-7 text-slate-600">
-                {event.description ||
-                  "The club has not added a description for this event yet."}
-              </p>
+          <div className="detail-body">
+            <h2 className="text-xl font-bold text-[var(--ink)]">About this event</h2>
+            <p className="mt-3 whitespace-pre-line break-words text-[0.95rem] leading-7 text-[var(--ink-soft)]">
+              {event.description ||
+                "The club has not added a description for this event yet."}
+            </p>
+
+            <div className="mt-8 grid border-y border-[var(--rule)] sm:grid-cols-3">
+              <div className="py-4 sm:pr-5">
+                <p className="mono-label">Date and time</p>
+                <p className="mt-1.5 text-sm font-semibold leading-6 text-[var(--ink)]">
+                  {formatDateTime(event.event_date)}
+                </p>
+              </div>
+              <div className="border-t border-[var(--rule)] py-4 sm:border-l sm:border-t-0 sm:px-5">
+                <p className="mono-label">Venue</p>
+                <p className="mt-1.5 text-sm font-semibold leading-6 text-[var(--ink)]">
+                  {event.venue || "To be announced"}
+                </p>
+              </div>
+              <div className="border-t border-[var(--rule)] py-4 sm:border-l sm:border-t-0 sm:pl-5">
+                <p className="mono-label">Organized by</p>
+                <p className="mt-1.5 text-sm font-semibold leading-6 text-[var(--ink)]">
+                  {event.creator_name}
+                </p>
+              </div>
             </div>
           </div>
-        </section>
+        </article>
 
-        <aside className="space-y-6 lg:sticky lg:top-24">
-          <section className="card p-6" aria-labelledby="registration-heading">
-            <div className="flex items-center justify-between gap-3">
-              <h2 id="registration-heading" className="text-lg font-bold text-slate-950">
-                Registration
-              </h2>
+        <aside className="order-first space-y-4 lg:order-none lg:sticky lg:top-24">
+          <section className="detail-aside" aria-labelledby="registration-heading">
+            <div className="detail-aside-title">
+              <h2 id="registration-heading">Registration</h2>
               {past ? (
-                <span className="badge-slate">Closed</span>
+                <span className="stamp stamp-muted">Closed</span>
               ) : full ? (
-                <span className="badge-rose">Full</span>
+                <span className="stamp stamp-red">Full</span>
               ) : (
-                <span className="badge-green">Open</span>
+                <span className="stamp stamp-green">Open</span>
               )}
             </div>
 
-            <div className="mt-4 space-y-2 text-sm text-slate-600">
-              <div className="flex items-center justify-between gap-3">
-                <span>Registered</span>
-                <span className="font-bold text-slate-950">{registered}</span>
+            <dl className="mt-4">
+              <div className="flex items-baseline justify-between gap-3 border-b border-dotted border-[var(--rule-strong)] py-2">
+                <dt className="mono-label">Registered</dt>
+                <dd className="font-mono text-sm font-semibold text-[var(--ink)]">
+                  {registered}
+                </dd>
               </div>
-              <div className="flex items-center justify-between gap-3">
-                <span>Capacity</span>
-                <span className="font-bold text-slate-950">
+              <div className="flex items-baseline justify-between gap-3 border-b border-dotted border-[var(--rule-strong)] py-2">
+                <dt className="mono-label">Capacity</dt>
+                <dd className="font-mono text-sm font-semibold text-[var(--ink)]">
                   {capacity === null ? "No limit" : capacity}
-                </span>
+                </dd>
               </div>
-            </div>
+            </dl>
 
             {percent !== null ? (
               <div
-                className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"
+                className="seat-meter mt-4"
                 role="progressbar"
                 aria-valuemin={0}
                 aria-valuemax={capacity}
@@ -201,7 +223,7 @@ export default async function EventDetailPage({ params }) {
                 aria-label={`${registered} of ${capacity} seats filled`}
               >
                 <div
-                  className={`h-full rounded-full ${full ? "bg-rose-500" : "bg-brand-500"}`}
+                  className={`seat-meter-fill ${full ? "seat-meter-fill-full" : ""}`}
                   style={{ width: `${percent}%` }}
                 />
               </div>
@@ -209,11 +231,11 @@ export default async function EventDetailPage({ params }) {
 
             <div className="mt-5">
               {past ? (
-                <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                <div className="border border-[var(--rule-strong)] bg-[var(--paper)] px-4 py-3 text-sm leading-6 text-[var(--ink-soft)]">
                   This event has already taken place. Registration is closed.
                 </div>
               ) : full && !user ? (
-                <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                <div className="border border-[var(--margin)] bg-[rgba(184,60,46,0.06)] px-4 py-3 text-sm leading-6 text-[var(--margin)]">
                   This event is at full capacity. Registration is closed.
                 </div>
               ) : user ? (
@@ -227,13 +249,16 @@ export default async function EventDetailPage({ params }) {
                   fullWidth
                 />
               ) : (
-                <div className="space-y-2">
-                  <Link href={loginHref} className="btn-primary w-full">
+                <div className="space-y-3">
+                  <Link href={loginHref} className="btn-primary btn-lg w-full">
                     Sign in to register
                   </Link>
                   <p className="hint text-center">
                     New to CampusConnect?{" "}
-                    <Link href={registerHref} className="font-semibold text-brand-700">
+                    <Link
+                      href={registerHref}
+                      className="font-semibold text-[var(--margin)] underline underline-offset-4"
+                    >
                       Create an account
                     </Link>
                     .
@@ -243,47 +268,58 @@ export default async function EventDetailPage({ params }) {
             </div>
 
             {registrationStatus === "REGISTERED" && !past ? (
-              <p className="hint">You have a seat. You can cancel anytime before the event.</p>
+              <p className="hint">
+                You have a seat. You can cancel anytime before the event.
+              </p>
             ) : null}
             {full && !past && user && registrationStatus !== "REGISTERED" ? (
               <p className="field-error">This event is at full capacity.</p>
             ) : null}
           </section>
 
-          <section className="card p-6" aria-labelledby="event-details-heading">
-            <h2 id="event-details-heading" className="text-lg font-bold text-slate-950">
+          <section
+            className="detail-aside hidden lg:block"
+            aria-labelledby="event-details-heading"
+          >
+            <h2 id="event-details-heading" className="detail-aside-title">
               Event details
             </h2>
-            <dl className="mt-4 space-y-3.5 text-sm">
-              <div className="flex items-start gap-2.5">
-                <Icon name="calendar" className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+            <dl className="mt-4 space-y-3.5">
+              <div className="grid grid-cols-[1.15rem_minmax(0,1fr)] gap-2.5">
+                <Icon name="calendar" className="mt-0.5 h-4 w-4 text-[var(--ink-faint)]" />
                 <div>
-                  <dt className="font-semibold text-slate-700">Date and time</dt>
-                  <dd className="text-slate-600">{formatDateTime(event.event_date)}</dd>
+                  <dt className="mono-label">Date and time</dt>
+                  <dd className="mt-0.5 text-sm leading-6 text-[var(--ink-soft)]">
+                    {formatDateTime(event.event_date)}
+                  </dd>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5">
-                <Icon name="mapPin" className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+              <div className="grid grid-cols-[1.15rem_minmax(0,1fr)] gap-2.5">
+                <Icon name="mapPin" className="mt-0.5 h-4 w-4 text-[var(--ink-faint)]" />
                 <div>
-                  <dt className="font-semibold text-slate-700">Venue</dt>
-                  <dd className="text-slate-600">{event.venue || "To be announced"}</dd>
+                  <dt className="mono-label">Venue</dt>
+                  <dd className="mt-0.5 text-sm leading-6 text-[var(--ink-soft)]">
+                    {event.venue || "To be announced"}
+                  </dd>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5">
-                <Icon name="user" className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+              <div className="grid grid-cols-[1.15rem_minmax(0,1fr)] gap-2.5">
+                <Icon name="user" className="mt-0.5 h-4 w-4 text-[var(--ink-faint)]" />
                 <div>
-                  <dt className="font-semibold text-slate-700">Organized by</dt>
-                  <dd className="text-slate-600">{event.creator_name}</dd>
+                  <dt className="mono-label">Organized by</dt>
+                  <dd className="mt-0.5 text-sm leading-6 text-[var(--ink-soft)]">
+                    {event.creator_name}
+                  </dd>
                 </div>
               </div>
-              <div className="flex items-start gap-2.5">
-                <Icon name="building" className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+              <div className="grid grid-cols-[1.15rem_minmax(0,1fr)] gap-2.5">
+                <Icon name="building" className="mt-0.5 h-4 w-4 text-[var(--ink-faint)]" />
                 <div>
-                  <dt className="font-semibold text-slate-700">Club</dt>
-                  <dd>
+                  <dt className="mono-label">Club</dt>
+                  <dd className="mt-0.5">
                     <Link
                       href={`/clubs/${event.club_id}`}
-                      className="font-medium text-brand-700 hover:text-brand-800"
+                      className="text-sm font-semibold text-[var(--ink)] underline decoration-[var(--rule-strong)] underline-offset-4 transition hover:text-[var(--margin)]"
                     >
                       {event.club_name}
                     </Link>
@@ -296,43 +332,39 @@ export default async function EventDetailPage({ params }) {
       </div>
 
       {admin ? (
-        <section className="mt-12" aria-labelledby="admin-tools-heading">
-          <div className="flex items-start gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-              <Icon name="shield" className="h-5 w-5" />
-            </span>
-            <div>
-              <p className="section-eyebrow">Club admin</p>
-              <h2 id="admin-tools-heading" className="text-2xl font-bold text-slate-950">
-                Manage this event
-              </h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Only approved admins of {event.club_name} can see this section.
-              </p>
-            </div>
-          </div>
+        <section className="mt-14" aria-labelledby="admin-tools-heading">
+          <SectionHeading
+            id="admin-tools-heading"
+            eyebrow="Club admin"
+            title="Manage this event"
+            description={`Only approved admins of ${event.club_name} can see this section.`}
+            badge="Admin only"
+            badgeClass="stamp stamp-red"
+          />
 
-          <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:items-start">
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:items-start">
             <div className="space-y-6">
-              <div className="card p-6">
-                <h3 className="text-lg font-bold text-slate-950">Edit event</h3>
-                <p className="mt-1 text-sm leading-6 text-slate-500">
-                  {past
-                    ? "This event has already taken place. You can still update its details or reschedule it."
-                    : "Update the details students see on this page."}
-                </p>
-                <div className="mt-5">
-                  <EditEventForm
-                    key={event.event_id}
-                    event={event}
-                    allowPast={past}
-                  />
+              <div className="detail-sheet">
+                <div className="detail-body">
+                  <h3 className="text-lg font-bold text-[var(--ink)]">Edit event</h3>
+                  <p className="mt-1 text-sm leading-6 text-[var(--ink-soft)]">
+                    {past
+                      ? "This event has already taken place. You can still update its details or reschedule it."
+                      : "Update the details students see on this page."}
+                  </p>
+                  <div className="mt-5">
+                    <EditEventForm
+                      key={event.event_id}
+                      event={event}
+                      allowPast={past}
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="card p-6">
-                <h3 className="text-lg font-bold text-slate-950">Danger zone</h3>
-                <p className="mt-1 text-sm leading-6 text-slate-500">
+              <div className="danger-zone">
+                <h3 className="text-lg font-bold text-[var(--ink)]">Danger zone</h3>
+                <p className="mt-1 text-sm leading-6 text-[var(--ink-soft)]">
                   Deleting the event also removes every registration.
                 </p>
                 <div className="mt-4">
@@ -345,75 +377,106 @@ export default async function EventDetailPage({ params }) {
               </div>
             </div>
 
-            <div className="card p-6">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-950">
-                    Registered participants
-                  </h3>
-                  <p className="mt-1 text-sm text-slate-500">
-                    Only club admins can see participant contact details.
-                  </p>
+            <div className="detail-sheet">
+              <div className="detail-head">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-lg font-bold text-[var(--ink)]">
+                      Registered participants
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-[var(--ink-soft)]">
+                      Only club admins can see participant contact details.
+                    </p>
+                  </div>
+                  <span className="badge-brand">
+                    {pluralize(participants.length, "participant")}
+                  </span>
                 </div>
-                <span className="badge-brand">{pluralize(participants.length, "participant")}</span>
               </div>
 
-              {participants.length > 0 ? (
-                <div className="table-shell mt-5">
-                  <div className="overflow-x-auto">
-                    <table className="table-base min-w-[640px]">
-                      <caption className="sr-only">
-                        Registered participants for {event.event_name}
-                      </caption>
-                      <thead>
-                        <tr>
-                          <th scope="col">Student</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Department</th>
-                          <th scope="col">Year</th>
-                          <th scope="col">Registered</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {participants.map((participant) => (
-                          <tr key={participant.user_id}>
-                            <td>
-                              <div className="flex items-center gap-2.5">
-                                <span className="avatar h-8 w-8 text-[11px]">
-                                  {initials(participant.name)}
-                                </span>
-                                <span className="font-semibold text-slate-900">
-                                  {participant.name}
-                                </span>
-                              </div>
-                            </td>
-                            <td>
-                              <a
-                                href={`mailto:${participant.email}`}
-                                className="text-brand-700 hover:underline"
-                              >
-                                {participant.email}
-                              </a>
-                            </td>
-                            <td>{participant.department || "—"}</td>
-                            <td>{participant.year ?? "—"}</td>
-                            <td className="whitespace-nowrap">
-                              {formatDateTime(participant.registration_date)}
-                            </td>
+              <div className="detail-body">
+                {participants.length > 0 ? (
+                  <div className="table-shell">
+                    <div
+                      className="overflow-x-auto"
+                      tabIndex={0}
+                      role="region"
+                      aria-label={`Registered participants for ${event.event_name}`}
+                    >
+                      <table className="table-base md:min-w-[640px]">
+                        <caption className="sr-only">
+                          Registered participants for {event.event_name}
+                        </caption>
+                        <thead>
+                          <tr>
+                            <th scope="col">Student</th>
+                            <th scope="col" className="hidden md:table-cell">
+                              Email
+                            </th>
+                            <th scope="col" className="hidden md:table-cell">
+                              Department
+                            </th>
+                            <th scope="col" className="hidden md:table-cell">
+                              Year
+                            </th>
+                            <th scope="col">Registered</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {participants.map((participant) => (
+                            <tr key={participant.user_id}>
+                              <td>
+                                <div className="flex items-center gap-2.5">
+                                  <span className="avatar h-8 w-8 text-[11px]">
+                                    {initials(participant.name)}
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block font-semibold text-[var(--ink)]">
+                                      {participant.name}
+                                    </span>
+                                    <a
+                                      href={`mailto:${participant.email}`}
+                                      className="mt-0.5 block truncate font-mono text-[0.7rem] text-[var(--margin)] underline-offset-4 hover:underline md:hidden"
+                                    >
+                                      {participant.email}
+                                    </a>
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="hidden md:table-cell">
+                                <a
+                                  href={`mailto:${participant.email}`}
+                                  className="text-[var(--margin)] underline-offset-4 hover:underline"
+                                >
+                                  {participant.email}
+                                </a>
+                              </td>
+                              <td className="hidden md:table-cell">
+                                {participant.department || "—"}
+                              </td>
+                              <td className="hidden md:table-cell">
+                                {participant.year ?? "—"}
+                              </td>
+                              <td className="whitespace-nowrap">
+                                {formatDateTime(participant.registration_date)}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div className="mt-5 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center">
-                  <p className="text-sm font-semibold text-slate-700">No registrations yet</p>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Registered students will appear here.
-                  </p>
-                </div>
-              )}
+                ) : (
+                  <div className="border border-dashed border-[var(--rule-strong)] bg-[rgba(248,249,243,0.6)] px-4 py-8 text-center">
+                    <p className="text-sm font-semibold text-[var(--ink)]">
+                      No registrations yet
+                    </p>
+                    <p className="mt-1 text-xs leading-5 text-[var(--ink-soft)]">
+                      Registered students will appear here.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </section>

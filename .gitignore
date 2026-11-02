@@ -28,3 +28,6 @@ pnpm-debug.log*
 *.pem
 .vercel
 *.tsbuildinfo
+
+# local design review artifacts (may contain session cookies)
+.impeccable/

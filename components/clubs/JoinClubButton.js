@@ -36,7 +36,7 @@ export default function JoinClubButton({ clubId, status: initialStatus = "NONE" 
 
   if (status === "APPROVED") {
     return (
-      <span className="badge-green">
+      <span className="stamp stamp-green">
         <Icon name="check" className="h-3.5 w-3.5" />
         You&apos;re a member
       </span>
@@ -46,15 +46,15 @@ export default function JoinClubButton({ clubId, status: initialStatus = "NONE" 
   if (status === "PENDING") {
     return (
       <div className="space-y-2">
-        <span className="badge-amber">
+        <span className="stamp stamp-amber">
           <Icon name="clock" className="h-3.5 w-3.5" />
           Request pending
         </span>
-        <p className="max-w-xs text-xs leading-5 text-slate-500">
+        <p className="max-w-xs text-xs leading-5 text-[var(--ink-soft)]">
           A club admin will review your request soon.
         </p>
         {success ? (
-          <p className="text-xs font-medium text-emerald-600" role="status">
+          <p className="form-success" role="status">
             {success}
           </p>
         ) : null}
@@ -70,7 +70,7 @@ export default function JoinClubButton({ clubId, status: initialStatus = "NONE" 
   return (
     <div className="space-y-2">
       {status === "REJECTED" ? (
-        <p className="max-w-xs text-xs leading-5 text-slate-500">
+        <p className="max-w-xs text-xs leading-5 text-[var(--ink-soft)]">
           Your previous request was not approved. You can ask to join again.
         </p>
       ) : null}
@@ -79,7 +79,7 @@ export default function JoinClubButton({ clubId, status: initialStatus = "NONE" 
         onClick={handleJoin}
         disabled={loading}
         aria-busy={loading}
-        className="btn-primary"
+        className="btn btn-primary"
       >
         {loading ? "Sending request…" : status === "REJECTED" ? "Request again" : "Request to join"}
         {!loading ? <Icon name="arrowRight" className="h-4 w-4" /> : null}

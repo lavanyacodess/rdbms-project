@@ -44,7 +44,7 @@ export default function MembershipActions({ clubId, userId, memberName = "this s
           onClick={() => update("APPROVED")}
           disabled={Boolean(pendingStatus)}
           aria-busy={pendingStatus === "APPROVED"}
-          className="btn-primary btn-sm"
+          className="btn btn-primary btn-sm"
           aria-label={`Approve ${memberName}`}
         >
           <Icon name="check" className="h-3.5 w-3.5" />
@@ -55,7 +55,7 @@ export default function MembershipActions({ clubId, userId, memberName = "this s
           onClick={() => update("REJECTED")}
           disabled={Boolean(pendingStatus)}
           aria-busy={pendingStatus === "REJECTED"}
-          className="btn-secondary btn-sm"
+          className="btn btn-secondary btn-sm"
           aria-label={`Reject ${memberName}`}
         >
           <Icon name="close" className="h-3.5 w-3.5" />
@@ -68,7 +68,7 @@ export default function MembershipActions({ clubId, userId, memberName = "this s
         </p>
       ) : null}
       {done ? (
-        <span className="text-xs font-medium text-emerald-600" role="status">
+        <span className="stamp stamp-green" role="status">
           {done}
         </span>
       ) : null}

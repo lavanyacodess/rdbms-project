@@ -93,30 +93,10 @@ export default async function ManageClubPage({ params }) {
   ]);
 
   const stats = [
-    {
-      label: "Approved members",
-      value: approvedMembers.length,
-      icon: "users",
-      color: "bg-brand-50 text-brand-600",
-    },
-    {
-      label: "Pending requests",
-      value: pendingRequests.length,
-      icon: "clock",
-      color: "bg-amber-50 text-amber-700",
-    },
-    {
-      label: "Upcoming events",
-      value: events.length,
-      icon: "calendar",
-      color: "bg-emerald-50 text-emerald-700",
-    },
-    {
-      label: "Announcements",
-      value: announcements.length,
-      icon: "megaphone",
-      color: "bg-violet-50 text-violet-600",
-    },
+    { label: "Approved members", value: approvedMembers.length, icon: "users" },
+    { label: "Pending requests", value: pendingRequests.length, icon: "clock" },
+    { label: "Upcoming events", value: events.length, icon: "calendar" },
+    { label: "Announcements", value: announcements.length, icon: "megaphone" },
   ];
 
   return (
@@ -129,18 +109,14 @@ export default async function ManageClubPage({ params }) {
         description="Update club details, review membership requests, and keep your events and announcements current."
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-px border border-[var(--rule-strong)] bg-[var(--rule)] xl:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="stat-card">
-            <div className="flex items-center justify-between gap-3">
+          <div key={stat.label} className="bg-[var(--paper-raised)] p-4">
+            <div className="flex items-start justify-between gap-2">
               <p className="stat-label">{stat.label}</p>
-              <span
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${stat.color}`}
-              >
-                <Icon name={stat.icon} className="h-4 w-4" />
-              </span>
+              <Icon name={stat.icon} className="h-4 w-4 shrink-0 text-[var(--ink-faint)]" />
             </div>
-            <p className="stat-value">{stat.value}</p>
+            <p className="stat-value mt-3">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -153,7 +129,7 @@ export default async function ManageClubPage({ params }) {
             title="Club details"
             description="These details appear on the public club page."
           />
-          <div className="card p-6 sm:p-8">
+          <div className="border border-[var(--rule-strong)] bg-[var(--paper-raised)] p-5 sm:p-7">
             <EditClubForm club={club} />
           </div>
         </section>
@@ -169,14 +145,28 @@ export default async function ManageClubPage({ params }) {
           />
           {pendingRequests.length ? (
             <div className="table-shell">
-              <div className="overflow-x-auto">
-                <table className="table-base min-w-[760px]">
+              <div
+                className="overflow-x-auto"
+                tabIndex={0}
+                role="region"
+                aria-label={`Pending membership requests for ${club.club_name}`}
+              >
+                <table className="table-base md:min-w-[760px]">
+                  <caption className="sr-only">
+                    Pending membership requests for {club.club_name}
+                  </caption>
                   <thead>
                     <tr>
                       <th scope="col">Student</th>
-                      <th scope="col">Department</th>
-                      <th scope="col">Year</th>
-                      <th scope="col">Requested</th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Department
+                      </th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Year
+                      </th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Requested
+                      </th>
                       <th scope="col" className="text-right">
                         Actions
                       </th>
@@ -191,14 +181,22 @@ export default async function ManageClubPage({ params }) {
                               {initials(request.name)}
                             </span>
                             <div className="min-w-0">
-                              <p className="font-semibold text-slate-900">{request.name}</p>
-                              <p className="truncate text-xs text-slate-400">{request.email}</p>
+                              <p className="font-semibold text-[var(--ink)]">{request.name}</p>
+                              <p className="truncate font-mono text-[0.7rem] text-[var(--ink-faint)]">
+                                {request.email}
+                              </p>
                             </div>
                           </div>
                         </td>
-                        <td>{request.department || "—"}</td>
-                        <td>{request.year ? `Year ${request.year}` : "—"}</td>
-                        <td className="whitespace-nowrap">{formatDate(request.joined_at)}</td>
+                        <td className="hidden md:table-cell">
+                          {request.department || "—"}
+                        </td>
+                        <td className="hidden md:table-cell">
+                          {request.year ? `Year ${request.year}` : "—"}
+                        </td>
+                        <td className="hidden whitespace-nowrap md:table-cell">
+                          {formatDate(request.joined_at)}
+                        </td>
                         <td>
                           <div className="flex justify-end">
                             <MembershipActions
@@ -233,15 +231,27 @@ export default async function ManageClubPage({ params }) {
           />
           {approvedMembers.length ? (
             <div className="table-shell">
-              <div className="overflow-x-auto">
-                <table className="table-base min-w-[720px]">
+              <div
+                className="overflow-x-auto"
+                tabIndex={0}
+                role="region"
+                aria-label={`Approved members of ${club.club_name}`}
+              >
+                <table className="table-base md:min-w-[720px]">
+                  <caption className="sr-only">Approved members of {club.club_name}</caption>
                   <thead>
                     <tr>
                       <th scope="col">Member</th>
-                      <th scope="col">Department</th>
-                      <th scope="col">Year</th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Department
+                      </th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Year
+                      </th>
                       <th scope="col">Role</th>
-                      <th scope="col">Joined</th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Joined
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -253,13 +263,19 @@ export default async function ManageClubPage({ params }) {
                               {initials(member.name)}
                             </span>
                             <div className="min-w-0">
-                              <p className="font-semibold text-slate-900">{member.name}</p>
-                              <p className="truncate text-xs text-slate-400">{member.email}</p>
+                              <p className="font-semibold text-[var(--ink)]">{member.name}</p>
+                              <p className="truncate font-mono text-[0.7rem] text-[var(--ink-faint)]">
+                                {member.email}
+                              </p>
                             </div>
                           </div>
                         </td>
-                        <td>{member.department || "—"}</td>
-                        <td>{member.year ? `Year ${member.year}` : "—"}</td>
+                        <td className="hidden md:table-cell">
+                          {member.department || "—"}
+                        </td>
+                        <td className="hidden md:table-cell">
+                          {member.year ? `Year ${member.year}` : "—"}
+                        </td>
                         <td>
                           {member.role === "ADMIN" ? (
                             <span className="badge-brand">Admin</span>
@@ -267,7 +283,9 @@ export default async function ManageClubPage({ params }) {
                             <span className="badge-slate">Member</span>
                           )}
                         </td>
-                        <td className="whitespace-nowrap">{formatDate(member.joined_at)}</td>
+                        <td className="hidden whitespace-nowrap md:table-cell">
+                          {formatDate(member.joined_at)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -293,14 +311,24 @@ export default async function ManageClubPage({ params }) {
           />
           {events.length ? (
             <div className="table-shell">
-              <div className="overflow-x-auto">
-                <table className="table-base min-w-[680px]">
+              <div
+                className="overflow-x-auto"
+                tabIndex={0}
+                role="region"
+                aria-label={`Upcoming events for ${club.club_name}`}
+              >
+                <table className="table-base md:min-w-[680px]">
+                  <caption className="sr-only">Upcoming events for {club.club_name}</caption>
                   <thead>
                     <tr>
                       <th scope="col">Event</th>
                       <th scope="col">Date &amp; time</th>
-                      <th scope="col">Venue</th>
-                      <th scope="col">Registered</th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Venue
+                      </th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Registered
+                      </th>
                       <th scope="col" className="text-right">
                         Details
                       </th>
@@ -314,7 +342,7 @@ export default async function ManageClubPage({ params }) {
                           <td>
                             <Link
                               href={`/events/${event.event_id}`}
-                              className="font-semibold text-slate-900 transition hover:text-brand-700"
+                              className="font-semibold text-[var(--ink)] transition hover:text-[var(--margin)]"
                             >
                               {event.event_name}
                             </Link>
@@ -322,15 +350,15 @@ export default async function ManageClubPage({ params }) {
                           <td className="whitespace-nowrap">
                             {formatDateTime(event.event_date)}
                           </td>
-                          <td>{event.venue || "—"}</td>
-                          <td className="whitespace-nowrap">
+                          <td className="hidden md:table-cell">{event.venue || "—"}</td>
+                          <td className="hidden whitespace-nowrap md:table-cell">
                             {registered}
                             {event.capacity != null ? ` / ${event.capacity}` : ""}
                           </td>
                           <td className="text-right">
                             <Link
                               href={`/events/${event.event_id}`}
-                              className="btn-secondary btn-sm"
+                              className="btn btn-secondary btn-sm"
                             >
                               View event
                             </Link>
@@ -349,14 +377,14 @@ export default async function ManageClubPage({ params }) {
               description="Create your first event below to get students on the calendar."
             />
           )}
-          <div className="card mt-6 p-6 sm:p-8">
-            <div className="mb-5 flex items-start gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-                <Icon name="calendar" className="h-5 w-5" />
+          <div className="mt-6 border border-[var(--rule-strong)] bg-[var(--paper-raised)] p-5 sm:p-7">
+            <div className="mb-5 flex items-start gap-3 border-b border-[var(--rule)] pb-4">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--rule-strong)] bg-[var(--paper)] text-[var(--margin)]">
+                <Icon name="calendar" className="h-4 w-4" />
               </span>
               <div>
-                <h3 className="text-lg font-bold text-slate-950">Create an event</h3>
-                <p className="mt-1 text-sm leading-6 text-slate-500">
+                <h3 className="text-lg font-bold text-[var(--ink)]">Create an event</h3>
+                <p className="mt-1 text-sm leading-6 text-[var(--ink-soft)]">
                   Add a new upcoming event for this club.
                 </p>
               </div>
@@ -374,23 +402,19 @@ export default async function ManageClubPage({ params }) {
             badge={pluralize(announcements.length, "announcement")}
           />
           {announcements.length ? (
-            <ul className="space-y-3">
+            <ul className="border-t border-[var(--rule-strong)]">
               {announcements.map((announcement) => (
                 <li
                   key={announcement.announcement_id}
-                  className="card flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between"
+                  className="flex flex-col gap-3 border-b border-[var(--rule)] py-4 sm:flex-row sm:items-start sm:justify-between"
                 >
                   <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-xs text-slate-400">
-                        {formatRelative(announcement.created_at)}
-                      </span>
-                    </div>
-                    <h3 className="mt-2 font-bold text-slate-950">{announcement.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                    <span className="mono-label">{formatRelative(announcement.created_at)}</span>
+                    <h3 className="mt-1 font-bold text-[var(--ink)]">{announcement.title}</h3>
+                    <p className="mt-1 max-w-2xl text-sm leading-6 text-[var(--ink-soft)]">
                       {truncate(announcement.content, 240)}
                     </p>
-                    <p className="mt-2 text-xs text-slate-400">
+                    <p className="mt-2 font-mono text-[0.7rem] text-[var(--ink-faint)]">
                       Posted by {announcement.author_name}
                     </p>
                   </div>

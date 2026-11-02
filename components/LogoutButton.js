@@ -28,7 +28,7 @@ export default function LogoutButton({ className = "", compact = false }) {
       title={compact ? "Sign out" : undefined}
       className={
         className ||
-        "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950 disabled:opacity-50"
+        "inline-flex h-10 w-10 items-center justify-center border border-transparent text-[var(--ink-soft)] transition hover:border-[var(--rule)] hover:bg-[var(--paper-raised)] hover:text-[var(--ink)] disabled:opacity-50"
       }
     >
       <Icon name="logout" className="h-4 w-4" />

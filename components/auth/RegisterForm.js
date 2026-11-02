@@ -147,16 +147,11 @@ export default function RegisterForm({ next = "/dashboard" }) {
   }
 
   return (
-    <div className="animate-rise">
-      <span className="badge-brand">
-        <Icon name="sparkles" className="h-3.5 w-3.5" />
-        Create your account
-      </span>
-
-      <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+    <div>
+      <h1 className="text-[clamp(1.75rem,4.4vw,2.9rem)] font-extrabold leading-[0.98] tracking-[-0.045em] text-[var(--ink)]">
         Join CampusConnect
       </h1>
-      <p className="mt-2 text-sm leading-6 text-slate-600">
+      <p className="mt-3 max-w-md text-sm leading-6 text-[var(--ink-soft)]">
         Create your student account and start finding your people.
       </p>
 
@@ -166,7 +161,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
         </div>
       ) : null}
 
-      <form className="mt-6 space-y-5" onSubmit={handleSubmit} aria-busy={loading} noValidate>
+      <form className="mt-7 space-y-6" onSubmit={handleSubmit} aria-busy={loading} noValidate>
         <div>
           <label htmlFor="name" className="label">
             Full name
@@ -174,7 +169,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
           <div className="relative">
             <Icon
               name="user"
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
             />
             <input
               id="name"
@@ -189,11 +184,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
               required
               aria-invalid={Boolean(fieldErrors.name)}
               aria-describedby={fieldErrors.name ? "name-error" : undefined}
-              className={`input pl-10 ${
-                fieldErrors.name
-                  ? "border-rose-300 focus:border-rose-400 focus:ring-rose-500/10"
-                  : ""
-              }`}
+              className={`input pl-7 ${fieldErrors.name ? "input-error" : ""}`}
             />
           </div>
           {fieldErrors.name ? (
@@ -210,7 +201,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
           <div className="relative">
             <Icon
               name="mail"
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
             />
             <input
               id="email"
@@ -228,11 +219,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
               required
               aria-invalid={Boolean(fieldErrors.email)}
               aria-describedby={fieldErrors.email ? "email-error" : undefined}
-              className={`input pl-10 ${
-                fieldErrors.email
-                  ? "border-rose-300 focus:border-rose-400 focus:ring-rose-500/10"
-                  : ""
-              }`}
+              className={`input pl-7 ${fieldErrors.email ? "input-error" : ""}`}
             />
           </div>
           {fieldErrors.email ? (
@@ -242,15 +229,18 @@ export default function RegisterForm({ next = "/dashboard" }) {
           ) : null}
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+        <div className="grid gap-6 sm:grid-cols-2">
           <div>
             <label htmlFor="department" className="label">
-              Department <span className="font-normal text-slate-400">(optional)</span>
+              Department{" "}
+              <span className="font-normal normal-case tracking-normal text-[var(--ink-faint)]">
+                (optional)
+              </span>
             </label>
             <div className="relative">
               <Icon
                 name="building"
-                className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
               />
               <input
                 id="department"
@@ -264,11 +254,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
                 disabled={loading}
                 aria-invalid={Boolean(fieldErrors.department)}
                 aria-describedby={fieldErrors.department ? "department-error" : undefined}
-                className={`input pl-10 ${
-                  fieldErrors.department
-                    ? "border-rose-300 focus:border-rose-400 focus:ring-rose-500/10"
-                    : ""
-                }`}
+                className={`input pl-7 ${fieldErrors.department ? "input-error" : ""}`}
               />
             </div>
             {fieldErrors.department ? (
@@ -280,12 +266,15 @@ export default function RegisterForm({ next = "/dashboard" }) {
 
           <div>
             <label htmlFor="year" className="label">
-              Year of study <span className="font-normal text-slate-400">(optional)</span>
+              Year of study{" "}
+              <span className="font-normal normal-case tracking-normal text-[var(--ink-faint)]">
+                (optional)
+              </span>
             </label>
             <div className="relative">
               <Icon
                 name="graduation"
-                className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
               />
               <select
                 id="year"
@@ -295,11 +284,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
                 disabled={loading}
                 aria-invalid={Boolean(fieldErrors.year)}
                 aria-describedby={fieldErrors.year ? "year-error" : undefined}
-                className={`select pl-10 ${
-                  fieldErrors.year
-                    ? "border-rose-300 focus:border-rose-400 focus:ring-rose-500/10"
-                    : ""
-                }`}
+                className={`select pl-7 ${fieldErrors.year ? "input-error" : ""}`}
               >
                 <option value="">Select year</option>
                 {YEARS.map(([value, label]) => (
@@ -324,7 +309,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
           <div className="relative">
             <Icon
               name="lock"
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
             />
             <input
               id="password"
@@ -340,16 +325,12 @@ export default function RegisterForm({ next = "/dashboard" }) {
               aria-describedby={
                 fieldErrors.password ? "password-error" : "password-hint"
               }
-              className={`input pl-10 pr-16 ${
-                fieldErrors.password
-                  ? "border-rose-300 focus:border-rose-400 focus:ring-rose-500/10"
-                  : ""
-              }`}
+              className={`input pl-7 pr-16 ${fieldErrors.password ? "input-error" : ""}`}
             />
             <button
               type="button"
               onClick={() => setShowPassword((current) => !current)}
-              className="absolute inset-y-0 right-0 flex items-center rounded-r-xl px-3.5 text-xs font-semibold text-slate-500 transition hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="absolute inset-y-0 right-0 flex items-center px-0 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-[var(--ink-soft)] transition hover:text-[var(--margin)] disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={showPassword ? "Hide password" : "Show password"}
               aria-pressed={showPassword}
               disabled={loading}
@@ -375,7 +356,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
           <div className="relative">
             <Icon
               name="lock"
-              className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+              className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--ink-faint)]"
             />
             <input
               id="confirmPassword"
@@ -391,16 +372,14 @@ export default function RegisterForm({ next = "/dashboard" }) {
               aria-describedby={
                 fieldErrors.confirmPassword ? "confirmPassword-error" : undefined
               }
-              className={`input pl-10 pr-16 ${
-                fieldErrors.confirmPassword
-                  ? "border-rose-300 focus:border-rose-400 focus:ring-rose-500/10"
-                  : ""
+              className={`input pl-7 pr-16 ${
+                fieldErrors.confirmPassword ? "input-error" : ""
               }`}
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword((current) => !current)}
-              className="absolute inset-y-0 right-0 flex items-center rounded-r-xl px-3.5 text-xs font-semibold text-slate-500 transition hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="absolute inset-y-0 right-0 flex items-center px-0 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-[var(--ink-soft)] transition hover:text-[var(--margin)] disabled:cursor-not-allowed disabled:opacity-50"
               aria-label={
                 showConfirmPassword ? "Hide confirm password" : "Show confirm password"
               }
@@ -421,7 +400,7 @@ export default function RegisterForm({ next = "/dashboard" }) {
           {loading ? (
             <>
               <span
-                className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+                className="h-3.5 w-3.5 animate-spin border border-[var(--paper-raised)] border-t-transparent"
                 aria-hidden="true"
               />
               Creating account…
@@ -435,11 +414,11 @@ export default function RegisterForm({ next = "/dashboard" }) {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-sm leading-6 text-[var(--ink-soft)]">
         Already have an account?{" "}
         <Link
           href={loginHref}
-          className="font-semibold text-brand-600 underline-offset-4 hover:text-brand-700 hover:underline"
+          className="font-semibold text-[var(--ink)] underline decoration-[var(--rule-strong)] underline-offset-4 transition hover:text-[var(--margin)]"
         >
           Sign in
         </Link>

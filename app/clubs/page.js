@@ -85,34 +85,34 @@ export default async function ClubsPage({ searchParams }) {
 
       <ClubFilters q={q} category={category} categories={categories} />
 
-      <div className="mt-6 mb-5 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-slate-600">
-          Showing <span className="font-semibold text-slate-900">{pluralize(clubs.length, "club")}</span>
+      <div className="mt-5 mb-5 flex flex-wrap items-center justify-between gap-3">
+        <p className="small-copy">
+          Showing{" "}
+          <span className="font-semibold text-[var(--ink)]">{pluralize(clubs.length, "club")}</span>
           {q ? (
             <>
               {" "}
-              matching <span className="font-medium text-slate-900">{q}</span>
+              matching <span className="font-medium text-[var(--ink)]">{q}</span>
             </>
           ) : null}
           {category ? (
             <>
               {" "}
-              in <span className="font-medium text-slate-900">{category}</span>
+              in <span className="font-medium text-[var(--ink)]">{category}</span>
             </>
           ) : null}
         </p>
         {hasFilters ? (
-          <Link
-            href="/clubs"
-            className="text-sm font-semibold text-brand-700 transition hover:text-brand-800"
-          >
+          <Link href="/clubs" className="link-arrow">
             Clear filters
           </Link>
         ) : null}
       </div>
 
+      <h2 className="sr-only">Club directory</h2>
+
       {clubs.length ? (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {clubs.map((club) => (
             <ClubCard key={club.club_id} club={club} />
           ))}
@@ -123,7 +123,7 @@ export default async function ClubsPage({ searchParams }) {
           title="No clubs match your filters"
           description="Try a different search term or browse another category."
           action={
-            <Link href="/clubs" className="btn-secondary">
+            <Link href="/clubs" className="btn btn-secondary">
               Clear filters
             </Link>
           }
@@ -134,7 +134,7 @@ export default async function ClubsPage({ searchParams }) {
           title="No clubs yet"
           description="Clubs will appear here once they are added to CampusConnect."
           action={
-            <Link href="/" className="btn-secondary">
+            <Link href="/" className="btn btn-secondary">
               Back to home
             </Link>
           }

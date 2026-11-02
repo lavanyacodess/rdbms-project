@@ -53,10 +53,12 @@ export default function DeleteAnnouncementButton({ announcementId }) {
           role="group"
           aria-label="Confirm announcement deletion"
         >
-          <span className="text-xs font-medium text-slate-500">Delete this announcement?</span>
+          <span className="font-mono text-[0.7rem] leading-5 text-[var(--ink-soft)]">
+            Delete this announcement?
+          </span>
           <button
             type="button"
-            className="btn-danger btn-sm"
+            className="btn btn-danger btn-sm"
             onClick={handleDelete}
             disabled={deleting}
           >
@@ -64,7 +66,7 @@ export default function DeleteAnnouncementButton({ announcementId }) {
           </button>
           <button
             type="button"
-            className="btn-secondary btn-sm"
+            className="btn btn-secondary btn-sm"
             onClick={cancel}
             disabled={deleting}
           >
@@ -74,7 +76,7 @@ export default function DeleteAnnouncementButton({ announcementId }) {
       ) : (
         <button
           type="button"
-          className="btn-ghost btn-sm text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+          className="btn btn-ghost btn-sm text-[var(--margin)]"
           onClick={startConfirming}
         >
           <Icon name="trash" className="h-3.5 w-3.5" />
@@ -83,7 +85,7 @@ export default function DeleteAnnouncementButton({ announcementId }) {
       )}
 
       {error ? (
-        <p className="text-xs font-medium text-rose-600" role="alert">
+        <p className="font-mono text-[0.7rem] leading-5 text-[var(--margin)]" role="alert">
           {error}
         </p>
       ) : null}

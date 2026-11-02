@@ -147,7 +147,10 @@ export default function CreateEventForm({ clubId }) {
 
         <div>
           <label htmlFor={ids.venue} className="label">
-            Venue <span className="font-normal text-slate-400">(optional)</span>
+            Venue{" "}
+            <span className="font-normal normal-case tracking-normal text-[var(--ink-faint)]">
+              (optional)
+            </span>
           </label>
           <input
             id={ids.venue}
@@ -171,7 +174,10 @@ export default function CreateEventForm({ clubId }) {
 
       <div>
         <label htmlFor={ids.capacity} className="label">
-          Capacity <span className="font-normal text-slate-400">(optional)</span>
+          Capacity{" "}
+          <span className="font-normal normal-case tracking-normal text-[var(--ink-faint)]">
+            (optional)
+          </span>
         </label>
         <input
           id={ids.capacity}
@@ -199,7 +205,10 @@ export default function CreateEventForm({ clubId }) {
 
       <div>
         <label htmlFor={ids.description} className="label">
-          Description <span className="font-normal text-slate-400">(optional)</span>
+          Description{" "}
+          <span className="font-normal normal-case tracking-normal text-[var(--ink-faint)]">
+            (optional)
+          </span>
         </label>
         <textarea
           id={ids.description}
@@ -222,7 +231,7 @@ export default function CreateEventForm({ clubId }) {
         )}
       </div>
 
-      <button type="submit" className="btn-primary" disabled={loading}>
+      <button type="submit" className="btn btn-primary" disabled={loading}>
         {loading ? "Creating event…" : "Create event"}
       </button>
     </form>

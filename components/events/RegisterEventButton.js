@@ -24,12 +24,17 @@ export default function RegisterEventButton({
   const status = statusOverride ?? initialStatus ?? null;
   const count = countOverride ?? (Number(registeredCount) || 0);
 
-  const seatLimit = capacity === null || capacity === undefined || capacity === "" ? null : Number(capacity);
+  const seatLimit =
+    capacity === null || capacity === undefined || capacity === ""
+      ? null
+      : Number(capacity);
   const full = seatLimit !== null && count >= seatLimit;
   const registered = status === "REGISTERED";
   const sizeClass = size === "lg" ? "btn-lg" : size === "sm" ? "btn-sm" : "";
   const widthClass = fullWidth ? "w-full" : "";
-  const wrapperClass = `flex flex-col items-end gap-1 ${fullWidth ? "w-full" : ""} ${className}`;
+  const wrapperClass = `flex flex-col gap-1.5 ${
+    fullWidth ? "w-full items-stretch" : "items-end"
+  } ${className}`;
 
   async function handleClick() {
     if (loading) return;
@@ -69,7 +74,7 @@ export default function RegisterEventButton({
   if (isPast) {
     return (
       <div className={wrapperClass}>
-        <button type="button" className={`btn-secondary ${sizeClass} ${widthClass}`} disabled>
+        <button type="button" className={`btn btn-secondary ${sizeClass} ${widthClass}`} disabled>
           Event ended
         </button>
       </div>
@@ -79,11 +84,16 @@ export default function RegisterEventButton({
   if (full && !registered) {
     return (
       <div className={wrapperClass}>
-        <button type="button" className={`btn-secondary ${sizeClass} ${widthClass}`} disabled>
+        <button type="button" className={`btn btn-secondary ${sizeClass} ${widthClass}`} disabled>
           Event full
         </button>
         {error ? (
-          <span className="max-w-56 text-right text-xs font-medium text-rose-600" role="alert">
+          <span
+            className={`font-mono text-[0.7rem] leading-5 text-[var(--margin)] ${
+              fullWidth ? "" : "text-right"
+            }`}
+            role="alert"
+          >
             {error}
           </span>
         ) : null}
@@ -95,12 +105,17 @@ export default function RegisterEventButton({
     <div className={wrapperClass}>
       <button
         type="button"
-        className={`${registered ? "btn-secondary" : "btn-primary"} ${sizeClass} ${widthClass}`}
+        className={`${registered ? "btn btn-secondary" : "btn btn-primary"} ${sizeClass} ${widthClass}`}
         onClick={handleClick}
         disabled={loading}
+        aria-busy={loading}
       >
         {loading ? (
-          registered ? "Cancelling…" : "Registering…"
+          registered ? (
+            "Cancelling…"
+          ) : (
+            "Registering…"
+          )
         ) : registered ? (
           <>
             <Icon name="close" className="h-3.5 w-3.5" />
@@ -115,16 +130,21 @@ export default function RegisterEventButton({
       </button>
       {message ? (
         <span
-          className={`text-xs font-medium ${
-            registered ? "text-emerald-600" : "text-slate-500"
-          }`}
+          className={`font-mono text-[0.7rem] leading-5 ${
+            registered ? "text-[var(--approved)]" : "text-[var(--ink-soft)]"
+          } ${fullWidth ? "" : "text-right"}`}
           role="status"
         >
           {message}
         </span>
       ) : null}
       {error ? (
-        <span className="max-w-56 text-right text-xs font-medium text-rose-600" role="alert">
+        <span
+          className={`font-mono text-[0.7rem] leading-5 text-[var(--margin)] ${
+            fullWidth ? "" : "text-right"
+          }`}
+          role="alert"
+        >
           {error}
         </span>
       ) : null}

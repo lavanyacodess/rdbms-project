@@ -122,8 +122,8 @@ export default async function ClubDetailPage({ params }) {
         actions={
           <>
             {canManage ? (
-              <Link href={`/clubs/${clubId}/manage`} className="btn-secondary">
-                <Icon name="shield" className="h-4 w-4" />
+              <Link href={`/clubs/${clubId}/manage`} className="btn btn-secondary">
+                <Icon name="shield" className="h-3.5 w-3.5" />
                 Manage club
               </Link>
             ) : null}
@@ -134,41 +134,41 @@ export default async function ClubDetailPage({ params }) {
                 status={membership?.status || "NONE"}
               />
             ) : (
-              <Link href={loginHref} className="btn-primary">
+              <Link href={loginHref} className="btn btn-primary">
                 Sign in to join
-                <Icon name="arrowRight" className="h-4 w-4" />
+                <Icon name="arrowRight" className="h-3.5 w-3.5" />
               </Link>
             )}
           </>
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-3">
-        <div className="card flex items-center gap-3 p-4">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
-            <Icon name="users" className="h-5 w-5" />
+      <div className="grid border-y border-[var(--rule-strong)] sm:grid-cols-3">
+        <div className="flex items-center gap-3 py-4 sm:px-4 sm:first:pl-0">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--rule)] bg-[var(--paper-raised)] text-[var(--ink-soft)]">
+            <Icon name="users" className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-lg font-bold text-slate-950">{memberCount}</p>
-            <p className="text-xs font-medium text-slate-500">Approved members</p>
+            <p className="stat-value">{memberCount}</p>
+            <p className="stat-label">Approved members</p>
           </div>
         </div>
-        <div className="card flex items-center gap-3 p-4">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
-            <Icon name="calendar" className="h-5 w-5" />
+        <div className="flex items-center gap-3 border-t border-[var(--rule)] py-4 sm:border-l sm:border-t-0 sm:px-4">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--rule)] bg-[var(--paper-raised)] text-[var(--ink-soft)]">
+            <Icon name="calendar" className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-lg font-bold text-slate-950">{events.length}</p>
-            <p className="text-xs font-medium text-slate-500">Upcoming events</p>
+            <p className="stat-value">{events.length}</p>
+            <p className="stat-label">Upcoming events</p>
           </div>
         </div>
-        <div className="card flex items-center gap-3 p-4">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
-            <Icon name="megaphone" className="h-5 w-5" />
+        <div className="flex items-center gap-3 border-t border-[var(--rule)] py-4 sm:border-l sm:border-t-0 sm:px-4">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--rule)] bg-[var(--paper-raised)] text-[var(--ink-soft)]">
+            <Icon name="megaphone" className="h-4 w-4" />
           </span>
           <div>
-            <p className="text-lg font-bold text-slate-950">{announcements.length}</p>
-            <p className="text-xs font-medium text-slate-500">Announcements</p>
+            <p className="stat-value">{announcements.length}</p>
+            <p className="stat-label">Announcements</p>
           </div>
         </div>
       </div>
@@ -207,13 +207,23 @@ export default async function ClubDetailPage({ params }) {
           />
           {members.length ? (
             <div className="table-shell">
-              <div className="overflow-x-auto">
-                <table className="table-base min-w-[560px]">
+              <div
+                className="overflow-x-auto"
+                tabIndex={0}
+                role="region"
+                aria-label={`Members of ${club.club_name}`}
+              >
+                <table className="table-base md:min-w-[560px]">
+                  <caption className="sr-only">Approved members of {club.club_name}</caption>
                   <thead>
                     <tr>
                       <th scope="col">Member</th>
-                      <th scope="col">Department</th>
-                      <th scope="col">Year</th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Department
+                      </th>
+                      <th scope="col" className="hidden md:table-cell">
+                        Year
+                      </th>
                       <th scope="col">Role</th>
                     </tr>
                   </thead>
@@ -225,11 +235,13 @@ export default async function ClubDetailPage({ params }) {
                             <span className="avatar h-9 w-9 text-xs">
                               {initials(member.name)}
                             </span>
-                            <span className="font-semibold text-slate-900">{member.name}</span>
+                            <span className="font-semibold text-[var(--ink)]">{member.name}</span>
                           </div>
                         </td>
-                        <td>{member.department || "—"}</td>
-                        <td>{member.year ? `Year ${member.year}` : "—"}</td>
+                        <td className="hidden md:table-cell">{member.department || "—"}</td>
+                        <td className="hidden md:table-cell">
+                          {member.year ? `Year ${member.year}` : "—"}
+                        </td>
                         <td>
                           {member.role === "ADMIN" ? (
                             <span className="badge-brand">Admin</span>

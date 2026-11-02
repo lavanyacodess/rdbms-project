@@ -66,17 +66,17 @@ export default function CreateAnnouncementForm({ clubId }) {
       noValidate
       aria-labelledby={`${formId}-heading`}
       aria-busy={loading}
-      className="card p-5 sm:p-6"
+      className="border border-[var(--rule-strong)] bg-[var(--paper-raised)] p-5 sm:p-7"
     >
-      <div className="flex items-start gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
-          <Icon name="megaphone" className="h-5 w-5" />
+      <div className="flex items-start gap-3 border-b border-[var(--rule)] pb-4">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-[var(--rule-strong)] bg-[var(--paper)] text-[var(--margin)]">
+          <Icon name="megaphone" className="h-4 w-4" />
         </span>
         <div>
-          <h2 id={`${formId}-heading`} className="text-lg font-bold text-slate-950">
+          <h2 id={`${formId}-heading`} className="text-lg font-bold text-[var(--ink)]">
             Publish an announcement
           </h2>
-          <p className="mt-1 text-sm leading-6 text-slate-500">
+          <p className="mt-1 text-sm leading-6 text-[var(--ink-soft)]">
             Share an update with everyone browsing the public announcements board.
           </p>
         </div>
@@ -93,13 +93,15 @@ export default function CreateAnnouncementForm({ clubId }) {
         </p>
       ) : null}
 
-      <div className="mt-5 space-y-4">
+      <div className="mt-5 space-y-5">
         <div>
           <div className="flex items-baseline justify-between gap-3">
             <label htmlFor={`${formId}-title`} className="label">
               Title
             </label>
-            <span className="text-xs tabular-nums text-slate-400">{title.length}/150</span>
+            <span className="font-mono text-[0.7rem] tabular-nums text-[var(--ink-faint)]">
+              {title.length}/150
+            </span>
           </div>
           <input
             id={`${formId}-title`}
@@ -120,7 +122,7 @@ export default function CreateAnnouncementForm({ clubId }) {
             <label htmlFor={`${formId}-content`} className="label">
               Content
             </label>
-            <span className="text-xs tabular-nums text-slate-400">
+            <span className="font-mono text-[0.7rem] tabular-nums text-[var(--ink-faint)]">
               {content.length}/5000
             </span>
           </div>
@@ -139,12 +141,12 @@ export default function CreateAnnouncementForm({ clubId }) {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="hint">Published immediately. Newest announcements appear first.</p>
-          <button type="submit" className="btn-primary" disabled={loading}>
+          <p className="hint mt-0">Published immediately. Newest announcements appear first.</p>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? (
               <>
                 <span
-                  className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+                  className="h-3.5 w-3.5 animate-spin border border-[var(--paper-raised)] border-t-transparent"
                   aria-hidden="true"
                 />
                 Publishing…
